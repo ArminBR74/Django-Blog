@@ -1,0 +1,13 @@
+{%load static%}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{%block title%} {%endblock%}</title>
+    <link rel="stylesheet" href="{%static 'base/style.css'%}" />
+    {%block head%}{%endblock%}
+  </head>
+  <body>
+    {% include "partial/header.html" %} {% include "partial/navigation.html" %}
+    {%block content%} {% endblock %} {%include "partial/footer.html"%}
+  </body>
+</html>
