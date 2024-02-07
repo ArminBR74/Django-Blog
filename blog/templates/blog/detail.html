@@ -1,1 +1,21 @@
-<h1>{{post.id}}</h1>
+{% extends "parents/base.html" %}
+{% comment %} {%load jformat%} {% endcomment %}
+{%block title%}post-list{%endblock%}
+{%block content%} 
+<main>
+  <div>
+
+    <h3>{{post.title}}</h3>
+    <p> {{post.description}}</p>
+    <span>
+      {%if post.created%}
+      {{post.created}}</span>
+      {%elif post.updated%}
+      {{post.updated}}
+      {%endif%}
+  </div>
+  <section>{{date | date:'H:i'}}</section>
+ 
+ </main>
+
+ {%endblock%}

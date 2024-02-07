@@ -2,8 +2,11 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django_jalali.db import models as jmodels
+from django.urls import reverse
 
 # Create your models here.
+# jalali calender is used
 
 
 class PublishManager(models.Manager):
@@ -20,19 +23,20 @@ class Post(models.Model):
 
     # relational data
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='user_posts')
+        User, on_delete=models.CASCADE, related_name='user_posts', verbose_name="کاربر")
 
     # data fields
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    slug = models.SlugField(unique=True)
-    publish = models.DateTimeField(default=timezone.now)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    title = models.CharField(max_length=255, verbose_name="تیتر")
+    description = models.TextField(verbose_name="متن")
+    slug = models.SlugField(unique=True, verbose_name="لینک")
+    publish = jmodels.jDateTimeField(
+        default=timezone.now, verbose_name="انتشار")
+    created = jmodels.jDateTimeField(auto_now_add=True, verbose_name="ساخت")
+    updated = jmodels.jDateTimeField(auto_now=True, verbose_name="به روز شده")
     status = models.CharField(
-        max_length=2, choices=Status.choices, default=Status.DRAFT)
+        max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name="وضعیت")
 
-    objects = models.Manager()
+    objects = jmodels.jManager()
     published = PublishManager
 
     # show title in admin panel
@@ -44,3 +48,8 @@ class Post(models.Model):
     class Meta:
         ordering = ('-publish', '-updated')
         indexes = [models.Index(fields=['-publish', '-updated'])]
+        verbose_name = "پست "
+        verbose_name_plural = "  پست ها"
+
+    def get_absulote_url(self, *args, **kwargs):
+        return reverse('blog:detail', args=[self.id])

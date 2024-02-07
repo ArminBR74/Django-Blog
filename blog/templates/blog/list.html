@@ -1,4 +1,24 @@
-{% extends "parents/base.html" %} {%block title%}post-list{%endblock%}
-{%block content%} {%for item in posts%}
-<main>{{item.title}}</main>
-{%endfor%} {%endblock%}
+{% extends "parents/base.html" %}
+{%block title%}post-list{%endblock%}
+{%load static%}
+{%block content%} 
+<main>
+  {%for item in posts%}
+  <div>
+  <ol>
+    <h3> <a href="{{item.get_absulote_url}}">{{item.title}}</a></h3>
+    <p> {{item.description}}</p>
+    <span>
+      {%if item.created%}
+      {{item.created}}</span>
+      {%elif item.updated%}
+      {{item.updated}}
+      {%endif%}
+  </div>
+  {%endfor%}
+
+  <ol>
+  {%include 'partial/pagination.html' with page=posts%}
+ </main>
+
+ {%endblock%}
